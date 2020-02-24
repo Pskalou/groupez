@@ -17,7 +17,7 @@ func _ready():
 	
 	# Création d'une classe de 5 Students
 	var classroom = Classroom.new(50)
-	classroom.populate_test_classe(7, "2CAP_AEPE_")
+	classroom.populate_test_classe(5, "2CAP_AEPE_")
 	
 	# Création d'une séance notée
 	var seance= Seance.new(scene, classroom, 15)

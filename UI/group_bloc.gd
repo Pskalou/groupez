@@ -45,29 +45,13 @@ func _ready():
 	new(group)
 
 
-func has_node(node_over) -> bool:
-	for current_node in self.get_children():
-		if current_node == node_over:
-			return true
-	return false
-
-
 func add_student():
 	pass
-
-
-func get_size() -> int:
-	return self.size
 
 
 func set_size(size):
 	self.size= size
 	self.adjust_size()
-
-
-func restore_size():
-	self.size= group.get_size()
-	adjust_size()
 
 
 func adjust_size():
@@ -82,9 +66,8 @@ func adjust_size():
 
 	# area2D surface
 	# mise à l'échelle du rectangleShape
-	var center_y= (50 + 50* size + 50) / 2 # rect du haut + center + end_rect
-	area.shape.set_extents(Vector2(175,center_y))
-	area.set_position(Vector2(175,center_y))
+	# area.shape.set_extents(Vector2(1750,750))
+	# area.set_position(Vector2(0,0))
 
 
 func new(group:Group):
@@ -127,37 +110,20 @@ var difference
 
 
 func _on_ColorRect_gui_input(event):
+	pass
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			if !mouse_dragging:
 				difference= get_viewport().get_mouse_position() - position
 			mouse_dragging = true
-			# mise au premier plan
-			z_index = z_index + 1
 		else:
 			mouse_dragging = false
-			# remettre sur le plan initial
-			z_index = z_index - 1
 	if event is InputEventMouseMotion and mouse_dragging:
 		var pos= get_viewport().get_mouse_position() - difference
 		set_position(pos)
+		
 
 
-
-
-func _on_Area2D_area_entered(area):
-	# nodes
-	var node_over = area.get_parent()
-	printt("goup_bloc",self, "touched by:", node_over)
-	
-	Singleton.send_group_bloc_touched_signal(self, node_over)
-
-
-
-func _on_Area2D_area_exited(area):
-	var node_over = area.get_parent()
-	printt("goup_bloc",self, "end of touched by", node_over)
-	
-	Singleton.send_group_bloc_exited_signal(self, node_over)
-	
+func _on_Area2D_mouse_entered():
+	print("MOUSSE")
 	pass # Replace with function body.
