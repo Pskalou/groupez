@@ -28,11 +28,11 @@ func _ready():
 	new(student)
 
 
-func new(student):
-	print ("student_button: " + str(student.get_label()) + ": créé")
-	self.student= student
-	self.label.set_text(str(student.get_label()))
-	self.level.set_text(str(student.get_level()))
+func new(_student):
+	print ("student_button: " + str(_student.get_label()) + ": créé")
+	self.student= _student
+	self.label.set_text(str(_student.get_label()))
+	self.level.set_text(str(_student.get_level()))
 
 
 func _on_right_button_mouse_entered():
@@ -46,7 +46,7 @@ func _on_right_button_pressed():
 	var old_level = student.get_level()
 	student.set_level(old_level + 1)
 	level.set_text(str(student.get_level()))
-	print(student.get_label() + ": "+ str(student.get_level()))
+	printt(student.get_label() + ": "+ str(student.get_level()))
 
 
 func _on_left_button_mouse_entered():
@@ -59,7 +59,7 @@ func _on_left_button_pressed():
 	var old_level = student.get_level()
 	student.set_level(old_level - 1)
 	level.set_text(str(student.get_level()))
-	print(student.get_label() + ": "+ str(student.get_level()))
+	printt(student.get_label() + ": "+ str(student.get_level()))
 	pass # Replace with function body.
 
 
@@ -74,7 +74,7 @@ func _on_object_gui_input(event):
 		if event.is_pressed():
 			if !mouse_dragging:
 				difference= get_global_mouse_position() - position
-#				print("dragging student bloc")
+#				printt("dragging student bloc")
 			mouse_dragging = true
 			z_index = z_index+1
 		else:

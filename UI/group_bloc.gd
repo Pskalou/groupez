@@ -49,8 +49,8 @@ func add_student():
 	pass
 
 
-func set_size(size):
-	self.size= size
+func set_size(_size):
+	self.size= _size
 	self.adjust_size()
 
 
@@ -70,12 +70,12 @@ func adjust_size():
 	# area.set_position(Vector2(0,0))
 
 
-func new(group:Group):
-	print ("group: " + str(group.get_id()) + ": créé")
-	self.group= group
-	self.size= group.get_size()
-	self.label.set_text(group.get_label())
-	self.level.set_text(str(group.get_group_level()))
+func new(_group:Group):
+	print ("group: " + str(_group.get_id()) + ": créé")
+	self.group= _group
+	self.size= _group.get_size()
+	self.label.set_text(_group.get_label())
+	self.level.set_text(str(_group.get_group_level()))
 	self.adjust_size()
 
 
@@ -89,7 +89,7 @@ func _on_right_button_pressed():
 	var old_level = group.get_group_level()
 	group.set_group_level(old_level + 1)
 	level.set_text(str(group.get_group_level()))
-	print(group.get_label() + ": "+ str(group.get_group_level()))
+	printt(group.get_label() + ": "+ str(group.get_group_level()))
 
 
 func _on_left_button_mouse_entered():
@@ -102,7 +102,7 @@ func _on_left_button_pressed():
 	var old_level = group.get_group_level()
 	group.set_group_level(old_level - 1)
 	level.set_text(str(group.get_group_level()))
-	print(group.get_label() + ": "+ str(group.get_group_level()))
+	printt(group.get_label() + ": "+ str(group.get_group_level()))
 
 #
 var mouse_dragging
@@ -125,5 +125,5 @@ func _on_ColorRect_gui_input(event):
 
 
 func _on_Area2D_mouse_entered():
-	print("MOUSSE")
+	printt("MOUSSE")
 	pass # Replace with function body.

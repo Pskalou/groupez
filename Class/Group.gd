@@ -62,9 +62,9 @@ func add_by_id(student_id):
 	if ! has_student_id(student_id):
 		# dictionnaire : key = student_id / value = score
 		self._students[student_id] = 0
-		print("OK: student id"+str(student_id)+" ajouté au groupe"+str(_id))
+		printt("OK: student id"+str(student_id)+" ajouté au groupe"+str(_id))
 	else:
-		print("(E) déjà dans le groupe")
+		printt("(E) déjà dans le groupe")
 
 
 func remove_by_id(student_id):

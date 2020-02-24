@@ -1,6 +1,7 @@
 extends Node2D
 class_name BlocsConstructor
 
+
 var classroom_node	:Node
 var classroom		:Classroom
 var node_scene		:Node
@@ -46,19 +47,17 @@ func build_group_blocs(pos:Vector2, group:Group):
 	
 	pos= Vector2(50,50)
 	for id in group.list():
-#		var id= student_array[0]
-		var level= group.get_student_level(id) # student_array[1]
 		var student= classroom.student_by_id(id)
 
-		print("instanciation student_button")
+		printt("instanciation student_button")
 		classroom_button.append(preload("res://UI/student_button.tscn").instance())
 		var current_button:Node2D = classroom_button[index]
 
-		print("affichage et positionnement du student_button")
+		printt("affichage et positionnement du student_button")
 		group_bloc.add_child(current_button)
 		current_button.set_position(pos)
 
-		print("initialisation du student_button")
+		printt("initialisation du student_button")
 		current_button.new(student)
 
 		pos += Vector2(0, 50)
@@ -75,18 +74,16 @@ func build_classroom_blocs():
 	for student in classroom.list():
 		if student.get_group() != null:
 			continue
-		var id= student.get_id()
-		var level= student.get_level()
 
-		print("instanciation student_button")
+		printt("instanciation student_button")
 		classroom_button.append(preload("res://UI/student_button.tscn").instance())
 		var current_button:Node2D = classroom_button[index]
 
-		print("affichage et positionnement du student_button")
+		printt("affichage et positionnement du student_button")
 		classroom_node.add_child(current_button)
 		current_button.set_position(pos)
 
-		print("initialisation du student_button")
+		printt("initialisation du student_button")
 		current_button.new(student)
 
 		pos += Vector2(0, 50)
