@@ -6,7 +6,7 @@ extends Node2D
 var right_button 
 var left_button
 
-var area
+var full_area
 
 var group
 var label
@@ -27,7 +27,7 @@ func _ready():
 	end_rect= $"end_rect"
 
 	# collission Shape pour détecter les contacts
-	area= $"Area2D/Shape"
+	full_area= $"Area2D/Shape"
 	
 	# interface IHM
 	right_button= $"ColorRect/MarginContainer/HBoxContainer/right_button"
@@ -49,6 +49,15 @@ func add_student():
 	pass
 
 
+func get_size():
+	return self.size
+
+
+func restore_size():
+	set_size(group.get_size())
+
+
+
 func set_size(_size):
 	self.size= _size
 	self.adjust_size()
@@ -66,8 +75,9 @@ func adjust_size():
 
 	# area2D surface
 	# mise à l'échelle du rectangleShape
-	# area.shape.set_extents(Vector2(1750,750))
-	# area.set_position(Vector2(0,0))
+	var half_height= (50 + size * 50 + 50 )/2
+	full_area.shape.set_extents(Vector2(175,half_height))
+	full_area.set_position(Vector2(175,half_height))
 
 
 func new(_group:Group):
@@ -116,14 +126,31 @@ func _on_ColorRect_gui_input(event):
 			if !mouse_dragging:
 				difference= get_viewport().get_mouse_position() - position
 			mouse_dragging = true
+			z_index = z_index+1
 		else:
 			mouse_dragging = false
+			z_index = z_index-1
 	if event is InputEventMouseMotion and mouse_dragging:
 		var pos= get_viewport().get_mouse_position() - difference
 		set_position(pos)
-		
 
 
-func _on_Area2D_mouse_entered():
-	printt("MOUSSE")
-	pass # Replace with function body.
+func has_node_children(other_node):
+	return self.get_children().has(other_node)
+
+
+func _on_Area2D_area_entered(area):
+	var other_node= area.get_parent()
+	if ! has_node_children(other_node):
+		Singleton.send_group_bloc_touched_signal(self, area.get_parent())
+	
+		printt("ENTERED me", self, "other", area.get_parent())
+	
+
+func _on_Area2D_area_exited(area):
+	var other_node= area.get_parent()
+	if ! has_node_children(other_node):
+	
+		printt("EXITED me", self, "other", area.get_parent())
+		Singleton.send_group_bloc_exited_signal(self, area.get_parent())
+

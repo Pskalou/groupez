@@ -102,9 +102,8 @@ func _on_center_contact_area_entered(area):
 	touched_nodes.append(area.get_parent())
 	printt("(OK) student_button", self, "list of touched nodes", touched_nodes )
 	
-	var node_over = area.get_parent().get_parent()
+	var node_over = area.get_parent()
 	printt("(OK) student_button",self, "touched by:", node_over)
-	pass # Replace with function body.
 
 
 func _on_center_contact_area_exited(area):

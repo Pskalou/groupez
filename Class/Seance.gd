@@ -5,7 +5,8 @@ class_name Seance
 #fait le lien entre une classroom et des groupes notés
 
 var _classroom
-var _groups:Array
+# dictionary {"id":..., "group":...}
+var groups:Dictionary
 var _id
 var _blocs
 var _groups_next_id
@@ -20,7 +21,7 @@ func _init(scene, classroom, id = 0):
 	printt("Seance.gd: séance "+ str(id) + " connectée à classroom " + str(classroom.get_id()))
 	
 	self._scene= scene
-	self._groups= []
+	self.groups= {}
 	self._id= id
 	self._classroom= classroom
 	self._groups_next_id= 0
@@ -79,7 +80,7 @@ func _on_Student_Button_dropped(student_button, position, touched_nodes):
 		_add_student_to_group(student_id, group_id)
 		_build_group_blocs(group_id, position)
 		_suppress_student_button(student_button)
-		_clean_groups_array()
+		_clean_groups_dict()
 		printt("OK seance", self, "étudiant seul et groupe créé")
 	# si l'étudiant quitte son groupe et est posé dans le vide => classroom
 	elif touched_nodes == []:
@@ -98,26 +99,17 @@ func _suppress_student_button(student_button):
 	student_button.queue_free()
 
 
-func _clean_groups_array():
-	"""used to remove empty group in groups array"""
-	printt("(W)",self," nettoyage du tableau _groups")
-	for group in _groups:
-		if group.get_size() == 0:
-			_groups.erase(group)
-			group.queue_free()
+func _clean_groups_dict():
+	"""used to remove empty group in groups dict"""
+	for id in groups:
+		if groups[id].get_size() == 0:
+			groups[id].queue_free()
+			groups.erase(id)
+	printt("OK",self," nettoyage du tableau _groups")
 
 
 func _select_group(group_id):
-	"""used to remove empty group in groups array"""
-#	printt("en cours: sélection du groupe"+str(group_id))
-	for group in _groups:
-		if group != null:
-			if group.get_id() == group_id:
-				printt("OK: sélection du groupe"+str(group_id))
-				return group
-	
-	printt("(E): sélection du groupe"+str(group_id)+" impossible")
-	return null
+	return groups.get(group_id)
 
 
 func _remove_student_from_group(student_id):
@@ -143,7 +135,7 @@ func _add_student_to_group(student_id, group_id):
 func _create_group() -> int:
 	var id= _groups_next_id
 	_groups_next_id = _groups_next_id + 1
-	_groups.append(Group.new(id))
+	groups[id]= Group.new(id)
 	printt("OK: groupe id"+ str(id)+" crée")
 	return id
 
@@ -180,7 +172,7 @@ func _on_group_bloc_touched(group_bloc, node_over):
 	# sauvegarde ancienne taille du bloc
 	_group_bloc_old_size= group_bloc.get_size()
 	
-	if ! group_bloc.has_node(node_over):
+	if ! group_bloc.has_node_children(node_over):
 		_set_size_group_bloc(group_bloc)
 
 

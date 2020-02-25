@@ -29,4 +29,5 @@ func _ready():
 	var info  = get_node("Popup/Info")
 	var popup = get_node("Popup")
 	popup.popup_centered_ratio()
+
 	info.set_text(texte)
