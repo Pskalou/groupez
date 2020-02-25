@@ -2,11 +2,17 @@
 extends Node2D
 class_name Seance
 
+
+# connexion seance => World
+var sync_datas : FuncRef
+
+
 #fait le lien entre une classroom et des groupes notés
 
-var _classroom
+var classroom	:Classroom
 # dictionary {"id":..., "group":...}
-var groups:Dictionary
+var groups		:Dictionary
+
 var _id
 var _blocs
 var _groups_next_id
@@ -15,15 +21,13 @@ var _scene
 
 var _group_bloc_old_size
 
+func _ready():
+	pass
 
-func _init(scene, classroom, id = 0):
-	printt("Seance.gd: création de séance "+ str(id))
-	printt("Seance.gd: séance "+ str(id) + " connectée à classroom " + str(classroom.get_id()))
-	
-	self._scene= scene
+
+func start():
+	self._scene= self
 	self.groups= {}
-	self._id= id
-	self._classroom= classroom
 	self._groups_next_id= 0
 	
 	# signaux à écouter et actions à faire
@@ -32,20 +36,16 @@ func _init(scene, classroom, id = 0):
 	Singleton.connect("group_bloc_exited", self , "_on_group_bloc_exited")
 	
 	# constructeur de blocs
-	_blocs= BlocsConstructor.new(_classroom, _scene)
-	_build_classroom_blocs()
+	_blocs= BlocsConstructor.new()
+	_blocs.classroom=	self.classroom
+	_blocs.node_scene=	_scene
+	_blocs._groups=		groups
+	
+	_blocs._build_classroom_blocs()
+	
+	# synchronise
+	sync_datas.call_func()
 
-
-func _build_classroom_blocs():
-	if _blocs.classroom_node != null:
-		_blocs.classroom_node.queue_free()
-	_blocs.build_classroom_blocs()
-
-
-func _build_group_blocs(group_id, position):
-	var group= _select_group(group_id)
-	_blocs.build_group_blocs(position , group)
-	printt("OK: création du bloc pour le"+ str(group.get_label())+"id"+str(group_id))
 
 
 func _rebuild_group_blocs(group_id):
@@ -55,7 +55,7 @@ func _rebuild_group_blocs(group_id):
 	
 	var group= _select_group(group_id)
 	if group.get_size() > 0:
-		_build_group_blocs(group_id, position)
+		_blocs.build_group_blocs(group_id, position)
 
 
 func _student_has_group(student):
@@ -65,35 +65,75 @@ func _student_has_group(student):
 		return true
 
 
-func _on_Student_Button_dropped(student_button, position, touched_nodes):
+func _on_Student_Button_dropped(student_button, position,previous_position, touched_nodes):
 	printt("OK: signal 'student_button_dropped' capté !")
 	
 	var student_id = student_button.student.get_id()
-	var student= _classroom.student_by_id(student_id)
+	var student= classroom.student_by_id(student_id)
+	var student_group_id = student.get_group()
 	
 	printt("OK: student id"+str(student_id)+" dropped")
 	printt("OK: position"+str(position))
 	
-	# si l'étudiant n'appartient à aucun groupe
-	if not _student_has_group(student):
+	# si l'étudiant n'appartient à aucun groupe et est dans le vide 
+	# => création d'un bloc/group
+	if not _student_has_group(student) and not is_over_group_bloc(touched_nodes):
 		var group_id= _create_group()
 		_add_student_to_group(student_id, group_id)
-		_build_group_blocs(group_id, position)
+		_blocs.build_group_blocs(group_id, position)
 		_suppress_student_button(student_button)
 		_clean_groups_dict()
 		printt("OK seance", self, "étudiant seul et groupe créé")
-	# si l'étudiant quitte son groupe et est posé dans le vide => classroom
-	elif touched_nodes == []:
-		printt("(W) seance", self, "retour de l'étudiant dans classroom")
+	# si l'étudiant possède un groupe et est posé dans le vide => classroom
+	elif _get_group_id_from_touched_nodes(touched_nodes) == null:
+		printt("OK seance", self, "retour de l'étudiant dans classroom")
 		var old_group_id = student.get_group()
 		_remove_student_from_group(student_id)
 		_suppress_student_button(student_button)
-		_build_classroom_blocs()
+		_blocs._build_classroom_blocs()
 		_rebuild_group_blocs(old_group_id)
+	# si l'étudiant est posé sur un groupe 
 	else:
-		printt("(W) seance", self, "liste des nodes touchés",touched_nodes)
-		
-		
+		var group_id = _get_group_id_from_touched_nodes(touched_nodes)
+		# son propre groupe => retour position initiale
+		if _student_over_own_group_bloc(student_group_id,group_id):
+			printt("OK seance", self, "student reste dans son groupe")
+			student_button.set_position(previous_position)
+		# autre groupe => changement de groupe
+		else:
+			var old_group_id = student.get_group()
+			_get_group_id_from_touched_nodes(touched_nodes)
+			if _student_has_group(student):
+				_remove_student_from_group(student_id)
+				_rebuild_group_blocs(old_group_id)
+			_suppress_student_button(student_button)
+			_add_student_to_group(student_id, group_id)
+			_rebuild_group_blocs(group_id)
+			printt("(W) seance", self, "student change de groupe")
+	
+	# synchronise
+	sync_datas.call_func()
+
+
+func is_over_group_bloc(touched_nodes):
+	return _get_group_id_from_touched_nodes(touched_nodes) != null
+
+
+func _get_group_id_from_touched_nodes(touched_nodes):
+	if touched_nodes == []:
+		return
+	for node_over in touched_nodes:
+		var node_over_filename= node_over.get_filename()
+		if node_over_filename == "res://UI/group_bloc.tscn":
+			return node_over.get_id()
+	printt("(E) Seance", self, "group bloc non trouvé dans touched_nodes")
+	return null
+
+
+func _student_over_own_group_bloc(student_group_id,group_id):
+	return student_group_id == group_id
+
+
 func _suppress_student_button(student_button):
 	print ("(W): suppression du bloc déplacé")
 	student_button.queue_free()
@@ -113,7 +153,7 @@ func _select_group(group_id):
 
 
 func _remove_student_from_group(student_id):
-	var student= _classroom.student_by_id(student_id)
+	var student= classroom.student_by_id(student_id)
 	var group_id= student.get_group()
 	
 	student.set_group(null)
@@ -126,7 +166,7 @@ func _add_student_to_group(student_id, group_id):
 	var group= _select_group(group_id)
 	group.add_by_id(student_id)
 	
-	var student= _classroom.student_by_id(student_id)
+	var student= classroom.student_by_id(student_id)
 	student.set_group(group_id)
 	
 	printt ("OK Seance",self,"student",student_id,"ajouté au group",group_id)

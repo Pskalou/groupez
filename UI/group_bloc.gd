@@ -48,6 +48,10 @@ func add_student():
 	pass
 
 
+func get_id():
+	return group.get_id()
+
+
 func get_size():
 	return self.size
 

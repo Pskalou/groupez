@@ -10,6 +10,8 @@ var student
 var label
 var level
 
+# connexion seance => World
+var sync_datas : FuncRef
 
 func _ready():
 	
@@ -29,7 +31,7 @@ func _ready():
 
 
 func new(_student):
-	print ("student_button: " + str(_student.get_label()) + ": créé")
+#	print ("student_button: " + str(_student.get_label()) + ": créé")
 	self.student= _student
 	self.label.set_text(str(_student.get_label()))
 	self.level.set_text(str(_student.get_level()))
@@ -46,6 +48,8 @@ func _on_right_button_pressed():
 	var old_level = student.get_level()
 	student.set_level(old_level + 1)
 	level.set_text(str(student.get_level()))
+	
+	# TODO synchroniser
 	printt(student.get_label() + ": "+ str(student.get_level()))
 
 
@@ -55,17 +59,22 @@ func _on_left_button_mouse_entered():
 func _on_left_button_mouse_exited():
 	left_button.set_modulate(Color( 1, 0.2, 0.2, 0.2))
 
+
+
 func _on_left_button_pressed():
 	var old_level = student.get_level()
 	student.set_level(old_level - 1)
 	level.set_text(str(student.get_level()))
+	
+	# TODO synchroniser
+	
 	printt(student.get_label() + ": "+ str(student.get_level()))
-	pass # Replace with function body.
 
 
 var mouse_dragging
 var difference
 
+var previous_position
 
 var start_position:Vector2
 
@@ -74,41 +83,43 @@ func _on_object_gui_input(event):
 		if event.is_pressed():
 			if !mouse_dragging:
 				difference= get_global_mouse_position() - position
-#				printt("dragging student bloc")
+				printt("dragging student bloc")
 			mouse_dragging = true
 			z_index = z_index+1
+			previous_position = position
 		else:
 			mouse_dragging = false
 			z_index = z_index -1
 			var pos= get_global_mouse_position() - difference
-			Singleton.send_student_button_signal(self, pos, touched_nodes)
+			Singleton.send_student_button_signal(self, pos, previous_position, touched_nodes)
 	
 	if event is InputEventMouseMotion and mouse_dragging:
 		set_position(get_global_mouse_position() - difference)
+#		printt("(W) touched_nodes : ",touched_nodes)
 
 
 
 var touched_nodes:Array = []
+
 
 func is_touching_bloc():
 	if touched_nodes == []:
 		return false
 	else:
 		return true
-	
 
 
 func _on_center_contact_area_entered(area):
 	touched_nodes.append(area.get_parent())
-	printt("(OK) student_button", self, "list of touched nodes", touched_nodes )
+#	printt("(OK) student_button", self, "list of touched nodes", touched_nodes )
 	
 	var node_over = area.get_parent()
-	printt("(OK) student_button",self, "touched by:", node_over)
+#	printt("(OK) student_button",self, "touched by:", node_over)
 
 
 func _on_center_contact_area_exited(area):
 	touched_nodes.erase(area.get_parent()) 
-	printt("(OK) student_button", self, "list of touched nodes", touched_nodes )
+#	printt("(OK) student_button", self, "list of touched nodes", touched_nodes )
 	
 
 

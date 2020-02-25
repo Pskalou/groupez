@@ -5,29 +5,27 @@ classe qui gère les classroom
 """
 # Class Classroom.gd
 
-# list of Student
-var _students
+
+# {student_id: student}
+var students:Dictionary
 var _id:int
 
 
 func set_id(id):
 	self._id= id
 
-	
+
 func get_id() -> int:
 	return self._id
 
 
 func _init(id=0):
-	self._students = []
+	self.students.empty()
 	self._id= id
 
 
 func has_id(id) -> bool:
-	for student in _students:
-		if student.get_id() == id:
-			return true
-	return false
+	return students.has(id)
 
 
 func add_student(student):
@@ -35,33 +33,28 @@ func add_student(student):
 	if has_id(id):
 		print ("création impossible, ID déjà utilisée")
 		return -1
-	_students.append(student)
+	students[id] = student
 
 
-func list(index = null):
-	if index == null:
-		return _students
-	return _students[index]
+func students_list():
+	return students.values()
 
 
-func student(index):
-	return _students[index]
+func student(id):
+	return students[id]
 
 
-func student_by_id(id):
-	for student in _students:
-		if id == student.get_id():
-			return student
-	return null
+func student_by_id(id):	
+	return students.get(id)
 
 
-func populate_test_classe(number_of_users, label) :
+func populate_classroom(number_of_users, label) :
 	""" populate classroom with tests students """
-	var students = []
+	var students_dict = {}
 	for id in range(number_of_users):
 		var user_label = label + str(id)
-		students.append(Student.new(id, user_label) )
-	self._students = students
+		students_dict[id] = Student.new(id, user_label)
+	self.students= students_dict
 
 
 func _to_string():
@@ -70,7 +63,7 @@ func _to_string():
 
 func to_string() -> String:
 	var texte = ""
-	for element in _students:
+	for element in students.values():
 		texte += element.to_string()
 		texte += "\n"
 	return texte
@@ -78,6 +71,6 @@ func to_string() -> String:
 
 func to_json():
 	var my_list = []
-	for element in _students:
+	for element in students.values():
 		my_list.append(element.to_dict())
 	return to_json(my_list)
