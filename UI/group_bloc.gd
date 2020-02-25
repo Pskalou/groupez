@@ -1,7 +1,6 @@
 extends Node2D
 
 
-
 # boutons gauche et droit
 var right_button 
 var left_button
