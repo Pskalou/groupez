@@ -1,0 +1,141 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://GUI.gd" type="Script" id=1]
+
+[node name="GUI" type="Control"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Popup" type="Popup" parent="."]
+visible = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 10.0
+margin_bottom = 10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="Popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="Popup/Panel/VBoxContainer"]
+margin_right = 213.0
+margin_bottom = 120.0
+
+[node name="CenterContainer" type="CenterContainer" parent="Popup/Panel/VBoxContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 206.0
+margin_bottom = 113.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer"]
+margin_right = 199.0
+margin_bottom = 106.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer"]
+margin_right = 199.0
+margin_bottom = 24.0
+
+[node name="Label" type="Label" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/HBoxContainer"]
+visible = false
+margin_top = 5.0
+margin_right = 118.0
+margin_bottom = 19.0
+text = "Nom de la classe :"
+
+[node name="classroom_label_focus" type="LineEdit" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/HBoxContainer"]
+margin_right = 199.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+align = 1
+expand_to_text_length = true
+placeholder_text = "Nom de la classe"
+caret_blink = true
+
+[node name="effectif_container" type="HBoxContainer" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 199.0
+margin_bottom = 82.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container"]
+margin_top = 20.0
+margin_right = 117.0
+margin_bottom = 34.0
+text = "Nombre d'élèves :"
+
+[node name="effectif_label" type="Label" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container"]
+margin_left = 121.0
+margin_top = 20.0
+margin_right = 145.0
+margin_bottom = 34.0
+text = "000"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container"]
+margin_left = 149.0
+margin_right = 199.0
+margin_bottom = 54.0
+size_flags_vertical = 3
+
+[node name="more_button" type="Button" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container/VBoxContainer"]
+margin_right = 50.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 50, 25 )
+text = "+"
+
+[node name="less_button" type="Button" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container/VBoxContainer"]
+margin_top = 29.0
+margin_right = 50.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 50, 25 )
+text = "-"
+
+[node name="validate_effectif_button" type="Button" parent="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer"]
+margin_top = 86.0
+margin_right = 199.0
+margin_bottom = 106.0
+text = "Valider"
+
+[node name="info_container" type="HBoxContainer" parent="Popup/Panel/VBoxContainer"]
+margin_top = 124.0
+margin_right = 213.0
+margin_bottom = 124.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextEdit" type="TextEdit" parent="Popup/Panel/VBoxContainer"]
+margin_top = 128.0
+margin_right = 213.0
+margin_bottom = 128.0
+
+[node name="Info" type="RichTextLabel" parent="Popup"]
+margin_top = 124.0
+margin_right = 984.0
+margin_bottom = 556.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container/VBoxContainer/more_button" to="." method="_on_more_button_pressed"]
+[connection signal="pressed" from="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container/VBoxContainer/less_button" to="." method="_on_less_button_pressed"]
+[connection signal="pressed" from="Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/validate_effectif_button" to="." method="_on_validate_effectif_button_pressed"]

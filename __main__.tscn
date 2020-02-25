@@ -1,42 +1,23 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://__main__.gd" type="Script" id=1]
+[ext_resource path="res://Class/Seance.gd" type="Script" id=2]
+[ext_resource path="res://World.gd" type="Script" id=3]
+[ext_resource path="res://Listener.gd" type="Script" id=4]
+[ext_resource path="res://GUI.gd" type="Script" id=5]
 
-[node name="Control" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Node" type="Node"]
 script = ExtResource( 1 )
+
+[node name="World" type="Container" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Popup" type="Popup" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 50.0
-margin_top = 50.0
-margin_right = -50.0
-margin_bottom = -50.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColorRect" type="ColorRect" parent="Popup"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0.321569, 0.321569, 0.321569, 1 )
-
-[node name="Info" type="RichTextLabel" parent="Popup"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "Hello every body
-
-c'est parti !"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="World"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/margin_right = 50
@@ -47,6 +28,324 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Node2D" type="Node2D" parent="MarginContainer"]
+[node name="Seance" type="Node2D" parent="World/MarginContainer"]
+script = ExtResource( 2 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="GUI" type="Control" parent="."]
+show_behind_parent = true
+anchor_left = 1.0
+anchor_right = 1.0
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Popup" type="Popup" parent="GUI"]
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 234.0
+margin_bottom = 90.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="GUI/Popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Popup/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/Popup/Panel/VBoxContainer"]
+margin_right = 213.0
+margin_bottom = 120.0
+
+[node name="CenterContainer" type="CenterContainer" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 206.0
+margin_bottom = 113.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer"]
+margin_right = 199.0
+margin_bottom = 106.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer"]
+margin_right = 199.0
+margin_bottom = 24.0
+
+[node name="Label" type="Label" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/HBoxContainer"]
+margin_top = 5.0
+margin_right = 118.0
+margin_bottom = 19.0
+text = "Nom de la classe :"
+
+[node name="classroom_label_focus" type="LineEdit" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/HBoxContainer"]
+margin_left = 122.0
+margin_right = 199.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+align = 1
+expand_to_text_length = true
+placeholder_text = "Nom de la classe"
+caret_blink = true
+
+[node name="effectif_container" type="HBoxContainer" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 199.0
+margin_bottom = 82.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container"]
+margin_top = 20.0
+margin_right = 117.0
+margin_bottom = 34.0
+text = "Nombre d'élèves :"
+
+[node name="effectif_label" type="Label" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container"]
+margin_left = 121.0
+margin_top = 20.0
+margin_right = 145.0
+margin_bottom = 34.0
+text = "000"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container"]
+margin_left = 149.0
+margin_right = 199.0
+margin_bottom = 54.0
+size_flags_vertical = 3
+
+[node name="more_button" type="Button" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container/VBoxContainer"]
+margin_right = 50.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 50, 25 )
+text = "+"
+
+[node name="less_button" type="Button" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container/VBoxContainer"]
+margin_top = 29.0
+margin_right = 50.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 50, 25 )
+text = "-"
+
+[node name="validate_effectif_button" type="Button" parent="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer"]
+margin_top = 86.0
+margin_right = 199.0
+margin_bottom = 106.0
+text = "Valider"
+
+[node name="info_container" type="HBoxContainer" parent="GUI/Popup/Panel/VBoxContainer"]
+margin_top = 124.0
+margin_right = 213.0
+margin_bottom = 148.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Info" type="RichTextLabel" parent="GUI/Popup/Panel/VBoxContainer/info_container"]
+margin_right = 104.0
+margin_bottom = 24.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+bbcode_enabled = true
+bbcode_text = "Vous pouvez personnaliser votre classe dans la fenêtre de droite.
+
+[indent]- la première ligne est le [b]nom[/b] de votre classe[/indent]
+[indent]- les lignes suivantes représentent les noms des élèves[/indent]
+
+Par exemple :
+[code]
+TCAP Aepe
+Pascal Padiasse
+Sonia Frisouille
+Thilou Kignon
+Julot Jolie
+Olga Bing
+[/code]
+
+"
+text = "Vous pouvez personnaliser votre classe dans la fenêtre de droite.
+
+	- la première ligne est le nom de votre classe
+	- les lignes suivantes représentent les noms des élèves
+
+Par exemple :
+
+TCAP Aepe
+Pascal Padiasse
+Sonia Frisouille
+Thilou Kignon
+Julot Jolie
+Olga Bing
+
+
+"
+selection_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Popup/Panel/VBoxContainer/info_container"]
+margin_left = 108.0
+margin_right = 213.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Classroom_focus" type="TextEdit" parent="GUI/Popup/Panel/VBoxContainer/info_container/VBoxContainer"]
+margin_right = 105.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0.0745098, 0.635294, 0.0941176, 1 )
+highlight_current_line = true
+show_line_numbers = true
+breakpoint_gutter = true
+fold_gutter = true
+caret_block_mode = true
+caret_blink = true
+
+[node name="Button" type="Button" parent="GUI/Popup/Panel/VBoxContainer/info_container/VBoxContainer"]
+margin_top = 4.0
+margin_right = 100.0
+margin_bottom = 24.0
+text = "Valider"
+
+[node name="Score_popup" type="Popup" parent="GUI"]
+visible = true
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 234.0
+margin_bottom = 90.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="GUI/Score_popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Score_popup/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/Score_popup/Panel/VBoxContainer"]
+margin_right = 184.0
+margin_bottom = 28.0
+
+[node name="CenterContainer" type="CenterContainer" parent="GUI/Score_popup/Panel/VBoxContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 177.0
+margin_bottom = 21.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Score_popup/Panel/VBoxContainer/PanelContainer/CenterContainer"]
+margin_left = 67.0
+margin_right = 102.0
+margin_bottom = 14.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Score_popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer"]
+margin_right = 35.0
+margin_bottom = 14.0
+
+[node name="Label" type="Label" parent="GUI/Score_popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/HBoxContainer"]
+margin_right = 35.0
+margin_bottom = 14.0
+text = "Score"
+align = 1
+
+[node name="info_container" type="HBoxContainer" parent="GUI/Score_popup/Panel/VBoxContainer"]
+margin_top = 32.0
+margin_right = 184.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Score_popup/Panel/VBoxContainer/info_container"]
+margin_right = 184.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score_info_label" type="RichTextLabel" parent="GUI/Score_popup/Panel/VBoxContainer/info_container/VBoxContainer"]
+margin_right = 184.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+bbcode_enabled = true
+bbcode_text = "affichage du score des élèves...."
+text = "affichage du score des élèves...."
+selection_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Close_Score_Button" type="Button" parent="GUI/Score_popup/Panel/VBoxContainer/info_container/VBoxContainer"]
+margin_left = 63.0
+margin_top = 4.0
+margin_right = 121.0
+margin_bottom = 24.0
+size_flags_horizontal = 4
+text = "Fermer"
+
+[node name="Listener" type="Control" parent="GUI"]
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 234.0
+margin_bottom = 90.0
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -208.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/VBoxContainer"]
+margin_right = 208.0
+margin_bottom = 20.0
+
+[node name="Label" type="Label" parent="GUI/VBoxContainer/HBoxContainer"]
+margin_top = 3.0
+margin_right = 104.0
+margin_bottom = 17.0
+text = "Afficher le score"
+
+[node name="Button" type="Button" parent="GUI/VBoxContainer/HBoxContainer"]
+margin_left = 108.0
+margin_right = 208.0
+margin_bottom = 20.0
+text = "Afficher Score"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container/VBoxContainer/more_button" to="GUI" method="_on_more_button_pressed"]
+[connection signal="pressed" from="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/effectif_container/VBoxContainer/less_button" to="GUI" method="_on_less_button_pressed"]
+[connection signal="pressed" from="GUI/Popup/Panel/VBoxContainer/PanelContainer/CenterContainer/VBoxContainer/validate_effectif_button" to="GUI" method="_on_validate_effectif_button_pressed"]
+[connection signal="pressed" from="GUI/Popup/Panel/VBoxContainer/info_container/VBoxContainer/Button" to="GUI" method="_on_list_Button_pressed"]
+[connection signal="pressed" from="GUI/Score_popup/Panel/VBoxContainer/info_container/VBoxContainer/Close_Score_Button" to="GUI" method="_on_Close_Score_Button_pressed"]
+[connection signal="pressed" from="GUI/VBoxContainer/HBoxContainer/Button" to="GUI" method="_on_Score_Button_pressed"]
